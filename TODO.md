@@ -1,9 +1,8 @@
 # TODO
->szyfrowanie
+>encryption
 
->licencja
+>license
 
->autouzupełnianie
+>autofill
 
->graficzny wygląd
-
+>graphic appearance
