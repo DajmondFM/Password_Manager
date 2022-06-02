@@ -1,19 +1,10 @@
-import os
-import json
+import pymongo
+from pymongo import MongoClient
 
-# Access to the files
-os.chdir(os.path.dirname(__file__))
+client = MongoClient("mongodb://localhost:27017")
+db = client["test"]
+collection = db["test"]
 
-# Open json file
-# Create a data.json
-# If file doesn't exist, create it
-if not os.path.exists('data.json'):
-    with open('data.json', 'w') as f:
-        data = {}
-        json.dump(data, f)
-
-with open('data.json', 'r+') as f:
-    data = json.load(f)
 
 def main():
     print("Welcome to Password Manager by Dajmond")
@@ -29,8 +20,8 @@ def main():
     elif choice == "2":
         view_passwords()
     elif choice == "3":
-        show_password()
-    elif choice == "4":
+    #     show_password()
+    # elif choice == "4":
         delete_password()
     elif choice == "5":
         exit()
@@ -39,44 +30,46 @@ def main():
         main()
 
 def add_password():
-    site = input("Enter the site url: ")
+    _id = input("Enter the id: ")
     login = input("Enter the login: ")
     password = input("Enter the password: ")
-    data[site] = {
+    data = {
+        "_id": _id,
         "login": login,
         "password": password
     }
-    with open('data.json', 'w') as f:
-        json.dump(data, f)
+    collection.insert_one(data)
     print("Password added")
     print("")
     main()
 
 def view_passwords():
-    for site in data:
-        print(site)
+    for _id in collection.find({},{"_id":1}):
+        print(_id["_id"])
     print("")
     main()
 
 def delete_password():
-    site = input("Enter the site: ")
-    if site in data:
-        del data[site]
-        with open('data.json', 'w') as f:
-            json.dump(data, f)
+    _id = input("Enter the _id: ")
+    if _id in collection.find({"_id":_id}):
+        collection.delete_one({"_id":_id})
         print("Password deleted \n")
     else:
         print("Password not found")
+        delete_password()
     main()
 
-def show_password():
-    site = input("Enter the site: ")
-    if site in data:
-        print("Login: " + data[site]["login"])
-        print("Password: " + data[site]["password"])
-        print("")
-    else:
-        print("Password not found")
-    main()
+
+
+
+
+
+
+
+
+
+
+
+
 
 main()
