@@ -19,9 +19,9 @@ def main():
         add_password()
     elif choice == "2":
         view_passwords()
-    elif choice == "3":
+    # elif choice == "3":
     #     show_password()
-    # elif choice == "4":
+    elif choice == "4":
         delete_password()
     elif choice == "5":
         exit()
@@ -51,7 +51,7 @@ def view_passwords():
 
 def delete_password():
     _id = input("Enter the _id: ")
-    if _id in collection.find({"_id":_id}):
+    if _id in collection.find({'_id':_id}):
         collection.delete_one({"_id":_id})
         print("Password deleted \n")
     else:
